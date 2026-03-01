@@ -28,10 +28,13 @@ struct allPathInfo {
     int color;
     Point point;
 };
-struct BFSResult {
+struct Result {
     std::unordered_map<Point, Point> parent;
     int distance;
     std::vector<allPathInfo> allPath;
+};
+struct DFSResult {
+    
 };
 const std::vector<Point> directions = {
         {1, 0},
@@ -104,7 +107,7 @@ std::vector<Point> reconstruct_path(
 
 void print_maze_with_bfs(
         std::vector<std::string> grid,
-        const BFSResult& res,
+        const Result& res,
         Point start,
         Point end
 ) {
@@ -134,7 +137,7 @@ void print_maze_with_bfs(
     }
 }
 
-BFSResult bfs (const std::vector<std::string>& map, const Point & start, const Point & end) {
+Result bfs (const std::vector<std::string>& map, const Point & start, const Point & end) {
     std::queue<Point> q;
     q.push(start);
     unsigned rows = map.size();
@@ -177,8 +180,52 @@ BFSResult bfs (const std::vector<std::string>& map, const Point & start, const P
     return {parent, answer, allPath};
 }
 
-std::vector<Point> dfs (const std::vector<std::string>& map, const Point & start, const Point & end) {
+Result dfs(const std::vector<std::string>& map,
+           const Point& start,
+           const Point& end)
+{
+    unsigned rows = map.size();
+    unsigned cols = map[0].size();
 
+    std::unordered_map<Point, Point> parent;
+    std::unordered_map<Point, int> distance;
+    std::vector<allPathInfo> allPath;
+
+    std::function<bool(Point)> visit = [&](Point current_pos) {
+        if (current_pos == end)
+            return true;
+
+        for (const auto& direction : directions) {
+            Point new_pos = current_pos + direction;
+
+            if (new_pos.y < 0 || new_pos.x < 0
+                || new_pos.x >= cols || new_pos.y >= rows
+                || map[new_pos.y][new_pos.x] == 'X')
+                continue;
+
+            if (distance.find(new_pos) != distance.end()) {
+                allPath.push_back({1, new_pos});
+                continue;
+            }
+
+            parent[new_pos] = current_pos;
+            distance[new_pos] = distance[current_pos] + 1;
+            allPath.push_back({0, new_pos});
+
+            if (visit(new_pos))
+                return true;
+        }
+        return false;
+    };
+
+    distance[start] = 0;
+    allPath.push_back({0, start});
+    visit(start);
+
+    auto it = distance.find(end);
+    int answer = (it == distance.end()) ? -1 : it->second;
+
+    return {parent, answer, allPath};
 }
 std::vector<Point> random_search (std::string map) {
 
@@ -209,7 +256,7 @@ int main() {
     Point s{1, 7};
     Point e{5, 3};
 
-    BFSResult resBFS = bfs(first_input, s, e);
+    Result resBFS = bfs(first_input, s, e);
     assert(resBFS.distance == 8);
 
     print_maze_with_bfs(first_input, resBFS, s, e);
