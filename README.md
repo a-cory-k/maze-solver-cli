@@ -57,7 +57,7 @@ end 5, 3
 
 ### Building and Running
 
-https://github.com/user-attachments/assets/b0722d4e-6fe1-465f-8e2b-dc81c9166bad
+![Мой-фильм-2-2](https://github.com/user-attachments/assets/b0722d4e-6fe1-465f-8e2b-dc81c9166bad)
 
 
 Compile the project with any modern C++ compiler (supporting C++17 or higher):
