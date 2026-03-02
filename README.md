@@ -62,18 +62,15 @@ https://github.com/user-attachments/assets/b0722d4e-6fe1-465f-8e2b-dc81c9166bad
 
 Compile the project with any modern C++ compiler (supporting C++17 or higher):
 
-Bash
-
-
+```
 g++ -std=c++17 main.cpp -o maze_solver
 Running with algorithm selection (astar is used by default):
+```
 
-Bash
-
-
+```
 ./maze_solver astar < map.txt
 
 ./maze_solver bfs < map.txt
 
-
+```
 
