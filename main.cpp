@@ -563,7 +563,13 @@ public:
 
             clear_screen();
             for (const auto& row : grid) std::cout << row << "\n";
-            std::cout << "DONE   dist=" << res.distance << "\n";
+            int openCount = 0;
+            for (const auto& step : res.allPath) {
+                if (step.color == 0) openCount++;
+            }
+
+            std::cout << "DONE   dist=" << res.distance
+                      << "   opened_nodes=" << openCount << "\n";
             print_viewport(grid, end, 80, 22);
         }
     }
